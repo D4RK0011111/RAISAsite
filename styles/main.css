@@ -75,3 +75,28 @@ button {
 .access-granted { color: #0f0; font-weight: bold; font-size: 18px; }
 .locked { color: var(--danger); font-weight: bold; font-size: 18px; }
   
+
+/* ---------- R.A.I.S.A. HEADER & LOGO ---------- */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.raisa-logo {
+  width: 48px;
+  height: 48px;
+  filter: brightness(1.2) sepia(1) hue-rotate(180deg) saturate(6)
+          drop-shadow(0 0 6px #00baff);
+  opacity: 0.95;
+  transition: filter 1s ease, opacity 1s ease, transform 0.5s ease;
+  user-select: none;
+}
+
+/* Optional: glowing boot-up effect */
+body.booting .raisa-logo {
+  filter: brightness(1.4) sepia(1) hue-rotate(180deg) saturate(10)
+          drop-shadow(0 0 10px #9be3ff) drop-shadow(0 0 20px #2bbfff);
+  transform: scale(1.05);
+}
