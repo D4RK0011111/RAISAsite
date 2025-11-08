@@ -168,14 +168,17 @@ function siteLockdown() {
   overlay.style.zIndex = "9999";
   overlay.style.animation = "screenFlash 0.8s ease-in-out infinite alternate";
 
-  // SCP logo (gray)
-  const logo = document.createElement("img");
-  logo.src = "assets/scp_logo.png";
-  logo.alt = "SCP Foundation Logo";
-  logo.style.width = "120px";
-  logo.style.height = "120px";
-  logo.style.filter = "grayscale(100%) brightness(70%)";
-  logo.style.marginTop = "30px";
+// SCP logo (large, light grey)
+const logo = document.createElement("img");
+logo.src = "https://static.wikia.nocookie.net/scp-containment-breach/images/3/3d/SCP_Foundation_Logo.png";
+logo.alt = "SCP Foundation Logo";
+logo.style.width = "200px";
+logo.style.height = "200px";
+logo.style.filter = "grayscale(100%) brightness(150%) contrast(80%) drop-shadow(0 0 10px rgba(200,200,200,0.3))";
+logo.style.opacity = "0.8";
+logo.style.marginTop = "20px";
+logo.style.marginBottom = "20px";
+
 
   // Top + bottom hazard stripes
   const stripeTop = document.createElement("div");
@@ -234,6 +237,10 @@ function siteLockdown() {
       from { background-position: 0 0; }
       to { background-position: 80px 0; }
     }
+    @keyframes logoFadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 0.85; transform: scale(1); }
+}
   `;
   document.head.appendChild(style);
 
@@ -271,8 +278,3 @@ function infiniteBeep() {
 }
 
 init();
-
-
-
-
-
