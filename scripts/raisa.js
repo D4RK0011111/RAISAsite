@@ -41,20 +41,39 @@ function beep(freq = 440, dur = 0.1, vol = 0.02) {
 
 /* ------------------- LOGIN LOGIC ------------------- */
 async function init() {
-  // Step 1: Begin initialization text
-  await typeSequence("R.A.I.S.A. DATABASE INTERFACE\nINITIALIZING CONNECTION...");
+  // Step 1: Type initial header
+  await typeSequence("R.A.I.S.A. DATABASE INTERFACE");
 
-  // Step 2: Wait a random amount of time between 5 and 15 seconds
-  const randomDelay = Math.floor(Math.random() * 10000) + 5000; // 5000–15000 ms
+  // Step 2: Start "INITIALIZING CONNECTION..." animation
+  terminal.textContent += "\nINITIALIZING CONNECTION";
+  let dotCount = 0;
+  let isRunning = true;
+
+  // This interval updates the dots every 500ms
+  const dotInterval = setInterval(() => {
+    if (!isRunning) return;
+    dotCount = (dotCount + 1) % 4; // cycles 0–3
+    const dots = ".".repeat(dotCount);
+    // Rewrite the connection line dynamically
+    const lines = terminal.textContent.split("\n");
+    lines[lines.length - 1] = "INITIALIZING CONNECTION" + dots;
+    terminal.textContent = lines.join("\n");
+  }, 500);
+
+  // Step 3: Wait a random amount between 5–15 seconds
+  const randomDelay = Math.floor(Math.random() * 10000) + 5000;
   await new Promise(resolve => setTimeout(resolve, randomDelay));
 
-  // Step 3: Continue to next line after "connecting"
-  await typeSequence("INITIALIZING CONNECTION...\nAUTHENTICATION SEQUENCE READY.");
-  
-  // Step 4: Show login form and status
+  // Step 4: Stop the dot animation and continue
+  isRunning = false;
+  clearInterval(dotInterval);
+
+  // Step 5: Print final line
+  terminal.textContent += "\nAUTHENTICATION SEQUENCE READY.";
   loginForm.style.display = "flex";
   statusBox.textContent = "Ready. Please authenticate.";
 }
+
 
 
 loginForm.addEventListener("submit", e => {
@@ -144,7 +163,7 @@ function siteLockdown() {
 
   // SCP logo (gray)
   const logo = document.createElement("img");
-  logo.src = "https://upload.wikimedia.org/wikipedia/commons/3/3d/SCP_Foundation_logo.svg";
+  logo.src = "assets/scp_logo.png";
   logo.alt = "SCP Foundation Logo";
   logo.style.width = "120px";
   logo.style.height = "120px";
@@ -245,6 +264,7 @@ function infiniteBeep() {
 }
 
 init();
+
 
 
 
