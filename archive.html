@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R.A.I.S.A. — Foundation Database</title>
+<link rel="stylesheet" href="styles/main.css">
+
+<style>
+body {
+  background: #050505;
+  color: #e6f1ef;
+  font-family: ui-monospace, monospace;
+  margin: 0;
+  padding: 40px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.raisa-logo {
+  width: 48px;
+  height: 48px;
+  filter: brightness(1.2) sepia(1) hue-rotate(180deg) saturate(6)
+          drop-shadow(0 0 6px #00baff);
+}
+
+h1 {
+  color: #9be3ff;
+  font-size: 20px;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.search-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 12px;
+  width: 100%;
+  color: #9be3ff;
+  margin-bottom: 30px;
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.file-entry {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 16px;
+  transition: background 0.3s;
+}
+
+.file-entry:hover {
+  background: rgba(155,227,255,0.05);
+}
+
+.file-id {
+  color: #9be3ff;
+  font-weight: bold;
+}
+
+.file-title {
+  color: #e6f1ef;
+}
+
+.file-clearance {
+  color: #ffcc00;
+  font-size: 13px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="assets/raisa_logo.png" alt="R.A.I.S.A. Logo" class="raisa-logo">
+  <h1>R.A.I.S.A. SECURE DATABASE ARCHIVE</h1>
+</div>
+
+<input type="text" id="search" class="search-box" placeholder="Search SCP file...">
+
+<div id="files" class="file-list">
+  <div class="file-entry">
+    <div class="file-id">SCP-173</div>
+    <div class="file-title">The Sculpture</div>
+    <div class="file-clearance">Clearance: Level 2</div>
+  </div>
+
+  <div class="file-entry">
+    <div class="file-id">SCP-049</div>
+    <div class="file-title">The Plague Doctor</div>
+    <div class="file-clearance">Clearance: Level 3</div>
+  </div>
+
+  <div class="file-entry">
+    <div class="file-id">SCP-682</div>
+    <div class="file-title">Hard-to-Destroy Reptile</div>
+    <div class="file-clearance">Clearance: Level 4</div>
+  </div>
+</div>
+
+<script>
+const searchBox = document.getElementById("search");
+const files = document.querySelectorAll(".file-entry");
+
+searchBox.addEventListener("input", () => {
+  const q = searchBox.value.toLowerCase();
+  files.forEach(file => {
+    const text = file.textContent.toLowerCase();
+    file.style.display = text.includes(q) ? "" : "none";
+  });
+});
+</script>
+
+</body>
+</html>
