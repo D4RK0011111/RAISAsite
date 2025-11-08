@@ -41,38 +41,45 @@ function beep(freq = 440, dur = 0.1, vol = 0.02) {
 
 /* ------------------- LOGIN LOGIC ------------------- */
 async function init() {
-  // Step 1: Type initial header
+  // Add "booting" class for blue glow animation on the logo
+  document.body.classList.add("booting");
+
+  // Step 1: Print the system header
   await typeSequence("R.A.I.S.A. DATABASE INTERFACE");
 
-  // Step 2: Start "INITIALIZING CONNECTION..." animation
+  // Step 2: Start the dynamic "INITIALIZING CONNECTION..." animation
   terminal.textContent += "\nINITIALIZING CONNECTION";
   let dotCount = 0;
   let isRunning = true;
 
-  // This interval updates the dots every 500ms
+  // Animate dots every 500 ms (cycles . → .. → ... → .)
   const dotInterval = setInterval(() => {
     if (!isRunning) return;
-    dotCount = (dotCount + 1) % 4; // cycles 0–3
+    dotCount = (dotCount + 1) % 4;
     const dots = ".".repeat(dotCount);
-    // Rewrite the connection line dynamically
     const lines = terminal.textContent.split("\n");
     lines[lines.length - 1] = "INITIALIZING CONNECTION" + dots;
     terminal.textContent = lines.join("\n");
   }, 500);
 
-  // Step 3: Wait a random amount between 5–15 seconds
+  // Step 3: Random delay between 5–15 seconds
   const randomDelay = Math.floor(Math.random() * 10000) + 5000;
   await new Promise(resolve => setTimeout(resolve, randomDelay));
 
-  // Step 4: Stop the dot animation and continue
+  // Step 4: Stop animation and print next line
   isRunning = false;
   clearInterval(dotInterval);
 
-  // Step 5: Print final line
-  terminal.textContent += "\nAUTHENTICATION SEQUENCE READY.";
+  await typeSequence("\nAUTHENTICATION SEQUENCE READY.");
+
+  // Step 5: Display login form and status
   loginForm.style.display = "flex";
   statusBox.textContent = "Ready. Please authenticate.";
+
+  // Remove blue glow animation once system is ready
+  document.body.classList.remove("booting");
 }
+
 
 
 
@@ -264,6 +271,7 @@ function infiniteBeep() {
 }
 
 init();
+
 
 
 
