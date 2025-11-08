@@ -41,10 +41,21 @@ function beep(freq = 440, dur = 0.1, vol = 0.02) {
 
 /* ------------------- LOGIN LOGIC ------------------- */
 async function init() {
-  await typeSequence("R.A.I.S.A. DATABASE INTERFACE\nINITIALIZING CONNECTION...\nAUTHENTICATION SEQUENCE READY.");
+  // Step 1: Begin initialization text
+  await typeSequence("R.A.I.S.A. DATABASE INTERFACE\nINITIALIZING CONNECTION...");
+
+  // Step 2: Wait a random amount of time between 5 and 15 seconds
+  const randomDelay = Math.floor(Math.random() * 10000) + 5000; // 5000–15000 ms
+  await new Promise(resolve => setTimeout(resolve, randomDelay));
+
+  // Step 3: Continue to next line after "connecting"
+  await typeSequence("INITIALIZING CONNECTION...\nAUTHENTICATION SEQUENCE READY.");
+  
+  // Step 4: Show login form and status
   loginForm.style.display = "flex";
   statusBox.textContent = "Ready. Please authenticate.";
 }
+
 
 loginForm.addEventListener("submit", e => {
   e.preventDefault();
@@ -108,6 +119,8 @@ function grantAccess(user) {
 
 /* ------------------- NEW: LOCKDOWN SYSTEM ------------------- */
 function siteLockdown() {
+  // Prevent double lockdown activation
+  if (locked) return;
   locked = true;
   loginForm.style.display = "none";
   statusBox.innerHTML = `<span class='locked'>LOCKDOWN INITIATED — MTF units notified.</span>`;
@@ -129,20 +142,31 @@ function siteLockdown() {
   overlay.style.zIndex = "9999";
   overlay.style.animation = "screenFlash 0.8s ease-in-out infinite alternate";
 
-  // Create top and bottom hazard stripes
+  // SCP logo (gray)
+  const logo = document.createElement("img");
+  logo.src = "https://upload.wikimedia.org/wikipedia/commons/3/3d/SCP_Foundation_logo.svg";
+  logo.alt = "SCP Foundation Logo";
+  logo.style.width = "120px";
+  logo.style.height = "120px";
+  logo.style.filter = "grayscale(100%) brightness(70%)";
+  logo.style.marginTop = "30px";
+
+  // Top + bottom hazard stripes
   const stripeTop = document.createElement("div");
   const stripeBottom = document.createElement("div");
   [stripeTop, stripeBottom].forEach(stripe => {
     stripe.style.width = "100%";
     stripe.style.height = "50px";
     stripe.style.backgroundImage = "repeating-linear-gradient(45deg, #ffcc00 0 20px, black 20px 40px)";
+    stripe.style.backgroundSize = "80px 80px";
+    stripe.style.animation = "stripeMove 2s linear infinite";
   });
   stripeTop.style.borderBottom = "3px solid #ff0000";
   stripeBottom.style.borderTop = "3px solid #ff0000";
 
-  // Create central warning box
+  // Warning box
   const warningBox = document.createElement("div");
-  warningBox.style.background = "rgba(0,0,0,0.8)";
+  warningBox.style.background = "rgba(0,0,0,0.85)";
   warningBox.style.border = "3px solid #ff3333";
   warningBox.style.boxShadow = "0 0 40px #ff000080";
   warningBox.style.padding = "40px 80px";
@@ -150,24 +174,26 @@ function siteLockdown() {
   warningBox.style.borderRadius = "12px";
   warningBox.style.animation = "pulseWarning 1.2s infinite";
   warningBox.innerHTML = `
-    <div style="font-size:38px; color:#ff3333; font-weight:bold; margin-bottom:10px;">
+    <div style="font-size:40px; color:#ff3333; font-weight:bold; margin-bottom:15px;">
       SYSTEM LOCKDOWN
     </div>
     <div style="color:#ffcc00; font-size:22px; margin-bottom:20px;">
       MTF UNIT GAMMA-5 ("Red Herrings") NOTIFIED
     </div>
     <div style="color:#cccccc; font-size:18px;">
-      All actions have been logged.<br>Local terminal access revoked.
+      All actions have been logged.<br>Local terminal access revoked.<br><br>
+      <span style="font-size:14px; color:#888;">R.A.I.S.A. Terminal #004 | Foundation Secure Network</span>
     </div>
   `;
 
-  // Append to overlay
+  // Assemble overlay
+  overlay.appendChild(logo);
   overlay.appendChild(stripeTop);
   overlay.appendChild(warningBox);
   overlay.appendChild(stripeBottom);
   document.body.appendChild(overlay);
 
-  // Add style animations
+  // Add keyframe animations
   const style = document.createElement("style");
   style.textContent = `
     @keyframes pulseWarning {
@@ -178,17 +204,20 @@ function siteLockdown() {
       0% { background-color: black; }
       100% { background-color: #1a0000; }
     }
+    @keyframes stripeMove {
+      from { background-position: 0 0; }
+      to { background-position: 80px 0; }
+    }
   `;
   document.head.appendChild(style);
 
-  // Start infinite soft looping beep–beep
+  // Begin infinite quiet alarm beep
   infiniteBeep();
 
-  // Redirect after a few seconds (opens YouTube as placeholder)
-  setTimeout(() => {
-    window.open("https://www.youtube.com/", "_blank");
-  }, 7000);
+  // ❌ No redirect — true lockdown
+  console.warn("R.A.I.S.A. lockdown: terminal sealed. No redirect executed.");
 }
+
 
 function infiniteBeep() {
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -216,5 +245,6 @@ function infiniteBeep() {
 }
 
 init();
+
 
 
