@@ -88,14 +88,23 @@ function grantAccess(user) {
   statusBox.innerHTML = `<span class='access-granted'>ACCESS GRANTED — Welcome, ${user.name} (Clearance Lvl ${user.clearance}).</span>`;
   beep(900, 0.15);
   loginForm.style.display = "none";
-  setTimeout(() => {
-    typeSequence(`Access token verified for ${user.email}\nRedirecting to query interface...`);
-    setTimeout(() => {
-      terminal.innerHTML = `<span class='access-granted'>QUERY INTERFACE:</span><br><br><input id='query' placeholder='Search SCP file...' style='width:90%;padding:8px;border-radius:6px;border:none;background:rgba(255,255,255,0.08);color:#9be3ff;'>`;
-      document.getElementById('query').focus();
-    }, 2000);
-  }, 1000);
+
+  // First, type the whole message
+  typeSequence(`Access token verified for ${user.email}\nRedirecting to query interface...`)
+    .then(() => {
+      // After typing finishes, wait 2s, then show the query interface
+      setTimeout(() => {
+        terminal.innerHTML = `
+          <span class='access-granted'>QUERY INTERFACE:</span><br><br>
+          <input id='query' placeholder='Search SCP file...'
+            style='width:90%;padding:8px;border-radius:6px;border:none;
+            background:rgba(255,255,255,0.08);color:#9be3ff;'>
+        `;
+        document.getElementById('query').focus();
+      }, 2000);
+    });
 }
+
 
 /* ------------------- NEW: LOCKDOWN SYSTEM ------------------- */
 function siteLockdown() {
@@ -164,3 +173,4 @@ function infiniteBeep() {
 }
 
 init();
+
