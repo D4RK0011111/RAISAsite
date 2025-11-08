@@ -112,7 +112,7 @@ function siteLockdown() {
   loginForm.style.display = "none";
   statusBox.innerHTML = `<span class='locked'>LOCKDOWN INITIATED — MTF units notified.</span>`;
 
-  // Add full-screen shutdown overlay
+  // Create full-screen overlay
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
   overlay.style.top = "0";
@@ -124,28 +124,71 @@ function siteLockdown() {
   overlay.style.flexDirection = "column";
   overlay.style.alignItems = "center";
   overlay.style.justifyContent = "center";
-  overlay.style.gap = "20px";
   overlay.style.color = "#ff3333";
   overlay.style.fontFamily = "ui-monospace, monospace";
-  overlay.style.fontWeight = "bold";
-  overlay.style.fontSize = "28px";
-  overlay.style.letterSpacing = "2px";
-  overlay.innerHTML = `
-    <div>SHUT DOWN</div>
-    <div>MTF UNIT GAMMA-5 NOTIFIED</div>
-    <div>ACTIONS LOGGED</div>
+  overlay.style.zIndex = "9999";
+  overlay.style.animation = "screenFlash 0.8s ease-in-out infinite alternate";
+
+  // Create top and bottom hazard stripes
+  const stripeTop = document.createElement("div");
+  const stripeBottom = document.createElement("div");
+  [stripeTop, stripeBottom].forEach(stripe => {
+    stripe.style.width = "100%";
+    stripe.style.height = "50px";
+    stripe.style.backgroundImage = "repeating-linear-gradient(45deg, #ffcc00 0 20px, black 20px 40px)";
+  });
+  stripeTop.style.borderBottom = "3px solid #ff0000";
+  stripeBottom.style.borderTop = "3px solid #ff0000";
+
+  // Create central warning box
+  const warningBox = document.createElement("div");
+  warningBox.style.background = "rgba(0,0,0,0.8)";
+  warningBox.style.border = "3px solid #ff3333";
+  warningBox.style.boxShadow = "0 0 40px #ff000080";
+  warningBox.style.padding = "40px 80px";
+  warningBox.style.textAlign = "center";
+  warningBox.style.borderRadius = "12px";
+  warningBox.style.animation = "pulseWarning 1.2s infinite";
+  warningBox.innerHTML = `
+    <div style="font-size:38px; color:#ff3333; font-weight:bold; margin-bottom:10px;">
+      SYSTEM LOCKDOWN
+    </div>
+    <div style="color:#ffcc00; font-size:22px; margin-bottom:20px;">
+      MTF UNIT GAMMA-5 ("Red Herrings") NOTIFIED
+    </div>
+    <div style="color:#cccccc; font-size:18px;">
+      All actions have been logged.<br>Local terminal access revoked.
+    </div>
   `;
+
+  // Append to overlay
+  overlay.appendChild(stripeTop);
+  overlay.appendChild(warningBox);
+  overlay.appendChild(stripeBottom);
   document.body.appendChild(overlay);
+
+  // Add style animations
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes pulseWarning {
+      0%, 100% { box-shadow: 0 0 40px #ff000080; }
+      50% { box-shadow: 0 0 80px #ff0000; }
+    }
+    @keyframes screenFlash {
+      0% { background-color: black; }
+      100% { background-color: #1a0000; }
+    }
+  `;
+  document.head.appendChild(style);
 
   // Start infinite soft looping beep–beep
   infiniteBeep();
 
-  // Redirect after a few seconds (YouTube as placeholder)
+  // Redirect after a few seconds (opens YouTube as placeholder)
   setTimeout(() => {
-    window.location.href = "https://www.youtube.com/";
-  }, 7000); // waits 7 seconds before redirect
+    window.open("https://www.youtube.com/", "_blank");
+  }, 7000);
 }
-
 
 function infiniteBeep() {
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -173,4 +216,5 @@ function infiniteBeep() {
 }
 
 init();
+
 
