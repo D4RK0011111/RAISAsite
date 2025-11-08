@@ -126,21 +126,16 @@ function grantAccess(user) {
   beep(900, 0.15);
   loginForm.style.display = "none";
 
-  // First, type the whole message
-  typeSequence(`Access token verified for ${user.email}\nRedirecting to query interface...`)
+  // First, type the full verification message
+  typeSequence(`Access token verified for ${user.email}\nRedirecting to secure R.A.I.S.A. database...`)
     .then(() => {
-      // After typing finishes, wait 2s, then show the query interface
+      // After typing finishes, wait 2 seconds, then redirect
       setTimeout(() => {
-        terminal.innerHTML = `
-          <span class='access-granted'>QUERY INTERFACE:</span><br><br>
-          <input id='query' placeholder='Search SCP file...'
-            style='width:90%;padding:8px;border-radius:6px;border:none;
-            background:rgba(255,255,255,0.08);color:#9be3ff;'>
-        `;
-        document.getElementById('query').focus();
+        window.location.href = "archive.html"; // ✅ Redirect to your database page
       }, 2000);
     });
 }
+
 
 
 /* ------------------- NEW: LOCKDOWN SYSTEM ------------------- */
@@ -278,4 +273,5 @@ function infiniteBeep() {
 }
 
 init();
+
 
